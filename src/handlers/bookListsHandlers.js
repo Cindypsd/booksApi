@@ -1,24 +1,17 @@
-const { createBookList } = require("../controllers/bookListControllers");
-const BookLists = require("../models/BookLists");
+const { createBookList, getBookListByName, getAllBookLists} = require("../controllers/bookListControllers");
 
-
-// const getBookList = (name) =>{
-//     const bookList = BookLists
-//     console.log(BookLists)
-//     return bookList
-// } 
- 
 const getAllBookListHandler = async (req, res) => {
-    const {name} = req.query
-    
-    try {
-        const booklists = await getBookList(name)
-        name ? res.send(`Aqui voy a llamar a la funcion para obtner lista con nombre ${name}`) : 
-        res.send(`Aqui aparecen todos las listas`)
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
+  const { name } = req.query;
 
+  const result = name ?
+                  await getBookListByName(name):
+                  await getAllBookLists();
+
+  try {
+    res.status(200).json(result)
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 
