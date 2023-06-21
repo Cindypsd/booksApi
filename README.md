@@ -71,8 +71,8 @@ The API exposes the following endpoints:
 
 ```bash
     [
-        {    "id": 1,    "name": "My Book List 1"  },
-        {    "id": 2,    "name": "My Book List 2"  },
+        {    "id": 1,    "name": "My Book List 1", "books": []  },
+        {    "id": 2,    "name": "My Book List 2", "books": []   },
     ]
 
 ```
@@ -105,8 +105,32 @@ The API exposes the following endpoints:
 
 ```bash
     [
-        {    "id": "12345",    "title": "Book Title",    "author": "Book Author"  },
-        {    "id": "67890",    "title": "Another Book Title",    "author": "Another Book Author"  },
+        {
+		    "title": "Primer amor",
+		    "id": "XoC0DwAAQBAJ",
+		    "description": "Primer amor (1860) es uno de los mejores ejemplos de r...",
+		    "authors": ["Ivan Turguenev"],
+            "categories": [ "Fiction"]
+	    },
+    ]
+```
+
+#### Add book to a List
+
+- Endpoint: POST /booklists/:listId/
+- Description: Add a book to a list specified by the list ID.
+- Request Body: bookId: The ID of the book to be added.
+- Response:
+
+```bash
+    [
+        {
+		   "title": "Primer amor",
+		    "id": "XoC0DwAAQBAJ",
+		    "description": "Primer amor (1860) es uno de los mejores ejemplos de r...",
+		    "authors": ["Ivan Turguenev"],
+            "categories": [ "Fiction"]
+	    },
     ]
 ```
 
