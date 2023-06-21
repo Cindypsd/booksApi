@@ -3,12 +3,14 @@ const {
   getAllBookListHandler,
   createABookListHandler,
   deleteABookListHandler,
+  addBookToListHandler,
 } = require("../handlers/bookListsHandlers");
 const listsRouter = Router();
 
 listsRouter.get("/", getAllBookListHandler);
 listsRouter.post("/", createABookListHandler);
 listsRouter.delete("/", deleteABookListHandler);
+listsRouter.post("/:listId", addBookToListHandler);
 
 //// Ruta para crear listas
 ///// TODO:Ruta para obtener todas las listas
