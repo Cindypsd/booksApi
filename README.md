@@ -117,7 +117,7 @@ The API exposes the following endpoints:
 
 #### Add book to a List
 
-- Endpoint: POST /booklists/:listId/
+- Endpoint: POST /booklists/:listId
 - Description: Add a book to a list specified by the list ID.
 - Request Body: bookId: The ID of the book to be added.
 - Response:

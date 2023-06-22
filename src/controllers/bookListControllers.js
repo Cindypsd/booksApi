@@ -53,10 +53,29 @@ const AddBookToList = async (bookId, listId) => {
   }
 };
 
+const removeBookFromList = async (bookId, listId) => {
+  const bookList = await BookList.findByPk(listId);
+
+  if (!bookList) {
+    throw new Error("Book list not found");
+  }
+
+  const book = await Book.findByPk(bookId);
+
+  if (!book) {
+    throw new Error("Book not found");
+  }
+
+  await bookList.removeBook(book);
+
+  return book;
+};
+
 module.exports = {
   createBookList,
   getBookListByName,
   getAllBookLists,
   deletedListByID,
   AddBookToList,
+  removeBookFromList,
 };

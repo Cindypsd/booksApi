@@ -6,6 +6,7 @@ const {
   getAllBookLists,
   deletedListByID,
   AddBookToList,
+  removeBookFromList,
 } = require("../controllers/bookListControllers");
 
 const createABookListHandler = async (req, res) => {
@@ -55,7 +56,20 @@ const addBookToListHandler = async (req, res) => {
 
   try {
     const addedBook = await AddBookToList(bookId, Number(listId));
-    res.status(201).json(addedBook);
+    res.status(200).send(`Book "${addedBook.title}" added to the list`);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+/// DELETE CONTROLLER
+
+const removeBookToListHandler = async (req, res) => {
+  const { listId, bookId } = req.params;
+
+  try {
+    const bookRemoved = await removeBookFromList(bookId, listId);
+    res.status(200).send(`Book "${bookRemoved.title}" removed from the list`);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -66,6 +80,7 @@ module.exports = {
   createABookListHandler,
   deleteABookListHandler,
   addBookToListHandler,
+  removeBookToListHandler,
 };
 
 // ApiKey = AIzaSyBJVShtsy8X7yAscQiYXSgorHaefdIlvLQ
