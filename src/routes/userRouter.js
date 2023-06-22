@@ -10,7 +10,7 @@ const validateData = (req, res, next) => {
   next();
 };
 
-userRouter.post("/sign-up", validateData, signupHandler);
+userRouter.post("/sign-up", validateData, signupHandler); // ☑️
 
 //TODO ---> userRouter.post("/login", loginHandler);
 

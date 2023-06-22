@@ -2,11 +2,21 @@ const axios = require("axios");
 const { BookList, Book } = require("../db");
 const { Op } = require("sequelize");
 
-const createBookList = async (name) => await BookList.create({ name });
+const createBookList = async (name) => {
+  const existingList = await BookList.findOne({ where: { name } });
+  if (existingList) throw new Error("List name is already registered");
+  return await BookList.create({ name });
+};
 
 const getBookListByName = async (name) => {
   const bookList = await BookList.findAll({
     where: { name: { [Op.iLike]: `%${name}%` } },
+    include: [
+      {
+        model: Book,
+        as: "books",
+      },
+    ],
   });
   return bookList;
 };
@@ -22,6 +32,10 @@ const getAllBookLists = async () => {
 };
 
 const deletedListByID = async (id) => {
+  const existingList = await BookList.findByPk(id);
+
+  if (!existingList) throw new Error("List not found");
+
   await BookList.destroy({
     where: {
       id: id,
@@ -30,26 +44,32 @@ const deletedListByID = async (id) => {
 };
 
 const AddBookToList = async (bookId, listId) => {
-  //TODO Aqui debe revisar que en Modelo Book no exista ya ese libro, si NO EXISTE consulta la API
-
-  const bookFromApi = await axios.get(
-    `https://www.googleapis.com/books/v1/volumes/${bookId}?key=AIzaSyBJVShtsy8X7yAscQiYXSgorHaefdIlvLQ`
-  );
-  const { id, volumeInfo } = bookFromApi.data;
-  const { title, description, authors, categories } = volumeInfo;
-  const bookToAdd = { title, id, description, authors, categories };
+  //TODO REVISAR ---> Si envio el mismo libro a otra lista me da error
+  //TODO Mandar error si el libro no existe ni en la base ni api
+  const existingList = await BookList.findByPk(listId);
+  if (!existingList) throw new Error("List not found");
 
   try {
-    // Crea el libro en el modelo "Book" y busca la lista en el modelo "BookList"
-    const createdBook = await Book.create(bookToAdd);
-    const bookList = await BookList.findByPk(listId);
+    const existingBook = await Book.findByPk(bookId);
+    let bookToAdd;
 
-    // Agrega el libro a la lista utilizando la asociación definida en los modelos
-    await createdBook.addBookList(bookList);
+    if (existingBook) {
+      bookToAdd = await Book.create(existingBook);
+    } else {
+      const bookFromApi = await axios.get(
+        `https://www.googleapis.com/books/v1/volumes/${bookId}?key=AIzaSyBJVShtsy8X7yAscQiYXSgorHaefdIlvLQ`
+      );
+      const { id, volumeInfo } = bookFromApi.data;
+      const { title, description, authors, categories } = volumeInfo;
+      const createdBook = { title, id, description, authors, categories };
+      bookToAdd = await Book.create(createdBook);
+    }
 
-    return createdBook;
+    await bookToAdd.addBookList(existingList);
+
+    return bookToAdd;
   } catch (error) {
-    throw new Error("Failed to add book to list"); // Lanza un error si ocurre algún problema
+    throw new Error("Failed to add book to list");
   }
 };
 

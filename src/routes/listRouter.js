@@ -8,23 +8,22 @@ const {
 } = require("../handlers/bookListsHandlers");
 const listsRouter = Router();
 
-const validateUser = (req,res,next) => {
-  //Middle para validar que sea un usuario registrado si no manda error
-  // if(user no existe) res.status(400).json({error: "Usuario no registrado"})
+const validateName = (req, res, next) => {
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ error: "Missing list name" });
+  next();
+};
 
-  //next()
-}
+const validateId = (req, res, next) => {
+  const { id } = req.body;
+  if (!id) return res.status(400).json({ error: "Missing list ID" });
+  next();
+};
 
-listsRouter.get("/", getAllBookListHandler);
-listsRouter.post("/", createABookListHandler);
-listsRouter.delete("/", deleteABookListHandler);
+listsRouter.get("/", getAllBookListHandler); // ☑️
+listsRouter.post("/", validateName, createABookListHandler); // ☑️
+listsRouter.delete("/", validateId, deleteABookListHandler); // ☑️
 listsRouter.post("/:listId/add-book", addBookToListHandler);
 listsRouter.delete("/:listId/remove-book/:bookId", removeBookToListHandler);
-
-//// Ruta para crear listas
-///// Ruta para obtener todas las listas
-///// Ruta para eliminar lista
-///// TODO: Ruta para eliminar un libro de la lista
-///// TODO: Ruta para agregar un libro a la lista
 
 module.exports = listsRouter;

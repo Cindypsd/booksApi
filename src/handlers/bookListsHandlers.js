@@ -7,16 +7,6 @@ const {
   removeBookFromList,
 } = require("../controllers/bookListControllers");
 
-const createABookListHandler = async (req, res) => {
-  const { name } = req.body;
-  try {
-    const newList = await createBookList(name);
-    res.status(201).json(newList);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
 const getAllBookListHandler = async (req, res) => {
   const { name } = req.query;
 
@@ -29,14 +19,18 @@ const getAllBookListHandler = async (req, res) => {
   }
 };
 
+const createABookListHandler = async (req, res) => {
+  const { name } = req.body;
+  try {
+    const newList = await createBookList(name);
+    res.status(201).json(newList);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 const deleteABookListHandler = async (req, res) => {
   const { id } = req.body;
-
-  //TODO Verificar que la lista exista
-  if (!id) {
-    res.status(400).json({ error: "Specify a book list to delete" });
-    return;
-  }
 
   try {
     await deletedListByID(id);
@@ -50,8 +44,6 @@ const addBookToListHandler = async (req, res) => {
   const { bookId } = req.body;
   const { listId } = req.params;
 
-  //TODO Verificar que la lista y el libro exista
-
   try {
     const addedBook = await AddBookToList(bookId, Number(listId));
     res.status(200).send(`Book "${addedBook.title}" added to the list`);
@@ -59,8 +51,6 @@ const addBookToListHandler = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
-/// DELETE CONTROLLER
 
 const removeBookToListHandler = async (req, res) => {
   const { listId, bookId } = req.params;
