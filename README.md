@@ -49,7 +49,7 @@ Make sure you have a PostgreSQL database set up. Update the database configurati
 ```bash
     {
         "email" : "test@prueba.com",
-	    "password" : "1235545672"
+	      "password" : "1235545672"
     }
 ```
 - Response:
@@ -57,7 +57,26 @@ Make sure you have a PostgreSQL database set up. Update the database configurati
     {
         "id": 12,
         "email" : "test@prueba.com",
+	      "password" : "1235545672"
+    }
+```
+
+####  Change Password
+
+- Endpoint: `/user/change-password`
+- Method: `PATCH`
+- Description: Change password.
+- Request body:
+```bash
+    {
+      "email" : "test@prueba.com",
 	    "password" : "1235545672"
+    }
+```
+- Response:
+```bash
+    {
+	    "message": "Password changed successfully"
     }
 ```
 
@@ -70,7 +89,7 @@ Make sure you have a PostgreSQL database set up. Update the database configurati
 ```bash
     {
         "email" : "test@prueba.com",
-	    "password" : "1235545672"
+	      "password" : "1235545672"
     }
 ```
 - Response: Returns an access token.
@@ -232,7 +251,7 @@ Where <token> is the access token generated during the login process.
 		    "id": "XoC0DwAAQBAJ",
 		    "description": "Primer amor (1860) es uno de ...",
 		    "authors": ["Ivan Turguenev"],
-            "categories": [ "Fiction"]
+        "categories": [ "Fiction"]
 	    },
     ]
 ```

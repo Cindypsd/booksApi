@@ -62,6 +62,7 @@ const AddBookToList = async (bookId, listId) => {
       const createdBook = { title, id, description, authors, categories };
       bookToAdd = await Book.create(createdBook);
     }
+    if(!bookToAdd) throw new Error("Book not found");
 
     await bookToAdd.addBookList(existingList);
 
