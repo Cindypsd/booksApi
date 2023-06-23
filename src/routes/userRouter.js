@@ -1,16 +1,11 @@
 const { Router } = require("express");
-const { signupHandler } = require("../handlers/userHandlers");
+const { signupHandler, loginHandler } = require("../handlers/userHandlers");
+const { validateUserData } = require("../utils/validations");
 
 const userRouter = Router();
 
-const validateData = (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email) return res.status(400).json({ error: "Missing email" });
-  if (!password) return res.status(400).json({ error: "Missing password" });
-  next();
-};
-
-userRouter.post("/sign-up", validateData, signupHandler); // ☑️
+userRouter.post("/sign-up", validateUserData, signupHandler); // ☑️
+userRouter.post("/login", validateUserData, loginHandler);
 
 //TODO ---> userRouter.post("/login", loginHandler);
 

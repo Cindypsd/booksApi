@@ -1,5 +1,7 @@
 const { User } = require("../db");
 
+const jwt = require("jsonwebtoken");
+
 const registerUser = async (email, password) => {
   const existingUser = await User.findOne({ where: { email } });
   if (existingUser) throw new Error("Email is already registered");
