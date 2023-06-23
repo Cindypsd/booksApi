@@ -1,4 +1,4 @@
-const { registerUser } = require("../controllers/userControllers");
+const { registerUser , changePassword} = require("../controllers/userControllers");
 const { User } = require("../db");
 const jwt = require("jsonwebtoken");
 
@@ -31,7 +31,22 @@ const loginHandler = async (req, res) => {
   }
 };
 
+const changePasswordHandler = async (req,res) => {
+  const { email, password, newpassword } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) throw new Error("Email is not registered");
+    if (user.password !== password) throw new Error("Wrong password");
+
+    await changePassword(user, newpassword);
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
 module.exports = {
   signupHandler,
   loginHandler,
+  changePasswordHandler
 };

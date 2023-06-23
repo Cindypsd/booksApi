@@ -8,6 +8,12 @@ const registerUser = async (email, password) => {
   return newUser;
 };
 
+const changePassword = async (user,newpassword) => {
+  user.password = newpassword;
+  await user.save();
+}
+
 module.exports = {
   registerUser,
+  changePassword
 };
