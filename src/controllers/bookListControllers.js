@@ -44,8 +44,6 @@ const deletedListByID = async (id) => {
 };
 
 const AddBookToList = async (bookId, listId) => {
-  //TODO REVISAR ---> Si envio el mismo libro a otra lista me da error
-  //TODO Mandar error si el libro no existe ni en la base ni api
   const existingList = await BookList.findByPk(listId);
   if (!existingList) throw new Error("List not found");
 
@@ -75,16 +73,10 @@ const AddBookToList = async (bookId, listId) => {
 
 const removeBookFromList = async (bookId, listId) => {
   const bookList = await BookList.findByPk(listId);
-
-  if (!bookList) {
-    throw new Error("Book list not found");
-  }
+  if (!bookList) throw new Error("Book list not found");
 
   const book = await Book.findByPk(bookId);
-
-  if (!book) {
-    throw new Error("Book not found");
-  }
+  if (!book) throw new Error("Book not found");
 
   await bookList.removeBook(book);
 

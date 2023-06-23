@@ -38,13 +38,59 @@ Make sure you have a PostgreSQL database set up. Update the database configurati
   npm start
 ```
 
-## API Endpoints
+## **USAGE**
 
-The API exposes the following endpoints:
+####  User Registration
+
+- Endpoint: `/user/sign-up`
+- Method: `POST`
+- Description: Creates a new user account.
+- Request body:
+```bash
+    {
+        "email" : "test@prueba.com",
+	    "password" : "1235545672"
+    }
+```
+- Response:
+```bash
+    {
+        "id": 12,
+        "email" : "test@prueba.com",
+	    "password" : "1235545672"
+    }
+```
+
+#### User Login
+
+- Endpoint: `/user/login`
+- Method: `POST`
+- Description: Authenticates a user and generates an access token.
+- Request body:
+```bash
+    {
+        "email" : "test@prueba.com",
+	    "password" : "1235545672"
+    }
+```
+- Response: Returns an access token.
+
+
+**Note**: The access token should be included in the header of subsequent requests as follows:
+
+```bash
+    Authorization: Bearer <token>
+```
+Where <token> is the access token generated during the login process.
+
+
+## **BookList API**
+
 
 #### Create a new book list
 
-- Endpoint: POST /booklists
+- Endpoint: `/booklists`
+- Method: `POST`
 - Description: Create a new book list.
 - Request body:
 
@@ -65,7 +111,8 @@ The API exposes the following endpoints:
 
 #### Get all book lists
 
-- Endpoint: GET /booklists
+- Endpoint: `/booklists`
+- Method: `GET`
 - Description: Retrieve all book lists.
 - Response:
 
@@ -77,9 +124,56 @@ The API exposes the following endpoints:
 
 ```
 
+#### Search a book lists by name
+
+- Endpoint: `/booklists?name=name`
+- Method: `GET`
+- Description: Retrieve a book lists.
+- Request example:  `/booklists?name=favo`
+- Response exmple:
+
+```bash
+    [
+        {
+            "id": 2,
+            "name": "Mis favoritos 2",
+            "books": [
+                {
+                    "id": "2InwDwAAQBAJ",
+                    "title": "El gran libro de la cocina",
+                    "description": "Muchas personas s...",
+                    "authors": [
+                        "Laura Landra",
+                        "Margherita Landra",
+                        "Pietro Semino"
+                    ],
+                    "categories": [
+                        "Cooking / Methods / General",
+                        "Cooking / Methods / Low Budget",
+                        "Cooking / Courses & Dishes / General",
+                        "Cooking / General"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "Mis favoritos 4",
+            "books": []
+        },
+        {
+            "id": 5,
+            "name": "Mis favoritos 5",
+            "books": []
+        },
+    ]
+
+```
+
 #### Delete a book list
 
-- Endpoint: DELETE /booklists
+- Endpoint: `/booklists`
+- Method: `DELETE`
 - Description: Delete a book list by its ID. Specify the ID in the request body.
 - Request body:
 
@@ -99,7 +193,8 @@ The API exposes the following endpoints:
 
 #### Search for books by title
 
-- Endpoint: GET /books?title=:title
+- Endpoint: `/books?title=:title`
+- Method: `GET`
 - Description: Search for books by their title using the Google Books API and query.
 - Response:
 
@@ -117,21 +212,39 @@ The API exposes the following endpoints:
 
 #### Add book to a List
 
-- Endpoint: POST /booklists/:listId
+- Endpoint: `/booklists/:listId/add-book`
+- Method: `POST`
 - Description: Add a book to a list specified by the list ID.
-- Request Body: bookId: The ID of the book to be added.
-- Response:
+- Request Body: bookId:
 
+```bash
+    [
+        {
+		    "bookId": "XoC0DwAAQBAJ",
+	    },
+    ]
+```
+- Response:
 ```bash
     [
         {
 		   "title": "Primer amor",
 		    "id": "XoC0DwAAQBAJ",
-		    "description": "Primer amor (1860) es uno de los mejores ejemplos de r...",
+		    "description": "Primer amor (1860) es uno de ...",
 		    "authors": ["Ivan Turguenev"],
             "categories": [ "Fiction"]
 	    },
     ]
+```
+
+#### Remove book from List
+
+- Endpoint: `/booklists/:listId/remove-book/:bookId`
+- Method: `DELETE`
+- Description: Remove a book from a list specified by the list ID.
+- Response:
+```bash
+   'Book < book title > removed from the list'
 ```
 
 Note: Replace :name and :title in the endpoints with the actual name or title you want to use in the requests.

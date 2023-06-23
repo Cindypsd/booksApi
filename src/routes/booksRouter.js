@@ -5,7 +5,4 @@ const booksRouter = Router();
 
 booksRouter.get("/", getBookByTitleHandler);
 
-//// Ruta para obtener libro por titulo
-// TODO: Ruta para guardar detalles de un libro
-
 module.exports = booksRouter;
