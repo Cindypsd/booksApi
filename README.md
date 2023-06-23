@@ -193,7 +193,7 @@ Where <token> is the access token generated during the login process.
 
 #### Search for books by title
 
-- Endpoint: `/books?title=:title`
+- Endpoint: `/books/search?title=:title`
 - Method: `GET`
 - Description: Search for books by their title using the Google Books API and query.
 - Response:

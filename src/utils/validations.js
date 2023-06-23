@@ -17,8 +17,20 @@ const validateListId = (req, res, next) => {
   next();
 };
 
+const validateBookTitle = (req, res, next) => {
+  const { title } = req.query;
+
+  if (!title) {
+    return res.status(400).json({ error: "Missing book title" });
+  }
+
+  next();
+};
+
+
 module.exports = {
   validateUserData,
   validateListId,
   validateListName,
+  validateBookTitle
 };
