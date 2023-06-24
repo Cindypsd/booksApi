@@ -45,8 +45,7 @@ const addBookToListHandler = async (req, res) => {
   const { listId } = req.params;
 
   try {
-    const addedBook = await AddBookToList(bookId, Number(listId));
-    res.status(200).send(`Book "${addedBook.title}" added to the list`);
+    await AddBookToList(bookId, Number(listId), res);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -245,15 +245,9 @@ Where <token> is the access token generated during the login process.
 ```
 - Response:
 ```bash
-    [
-        {
-		   "title": "Primer amor",
-		    "id": "XoC0DwAAQBAJ",
-		    "description": "Primer amor (1860) es uno de ...",
-		    "authors": ["Ivan Turguenev"],
-        "categories": [ "Fiction"]
-	    },
-    ]
+
+      'Book < book title > added to list < list name >'
+  
 ```
 
 #### Remove book from List

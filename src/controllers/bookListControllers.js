@@ -1,6 +1,7 @@
 const axios = require("axios");
 const { BookList, Book } = require("../db");
 const { Op } = require("sequelize");
+const { validateBookTitle } = require("../utils/validations");
 
 const createBookList = async (name) => {
   const existingList = await BookList.findOne({ where: { name } });
@@ -26,7 +27,7 @@ const getAllBookLists = async () => {
     include: {
       model: Book,
       as: "books",
-    },
+    }
   });
   return allLists;
 };
@@ -43,32 +44,46 @@ const deletedListByID = async (id) => {
   });
 };
 
-const AddBookToList = async (bookId, listId) => {
-  const existingList = await BookList.findByPk(listId);
-  if (!existingList) throw new Error("List not found");
+const AddBookToList = async (bookId, listId, res) => {
+  console.log('-> Informacion que me llega', bookId, listId);
 
   try {
-    const existingBook = await Book.findByPk(bookId);
-    let bookToAdd;
+    // Primero verificar que exista la lista
+    const existingList = await BookList.findByPk(listId);
+    if (!existingList) throw new Error("List not found");
 
-    if (existingBook) {
-      bookToAdd = await Book.create(existingBook);
+    // Verificar si el libro ya está en la lista
+    const isBookInList = await existingList.hasBook(bookId);
+    if (isBookInList) throw new Error(`Book with ID: ${bookId} is already in the list`);
+
+    /// Verificar si el libro existe en la base de datos
+    const bookInDB = await Book.findByPk(bookId);
+    if (bookInDB) {
+      await bookInDB.addBookList(existingList);
+      return res.status(200).json(`Book '${bookInDB.dataValues.title}' to list '${existingList.dataValues.name}' DB`)
     } else {
+      // Si no está en la base de datos, buscar en la API
+      console.log('-> Buscando en la API ...');
       const bookFromApi = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes/${bookId}?key=AIzaSyBJVShtsy8X7yAscQiYXSgorHaefdIlvLQ`
+        `https://www.googleapis.com/books/v1/volumes/${bookId}?key=AIzaSyCQXKm94XO4hU-gK5b4kXtAxPUHPlQrYds`
       );
+
+      if (!bookFromApi.data || !bookFromApi.data.volumeInfo) {
+        throw new Error(`Book with ID: ${bookId} not found`);
+      }
+
       const { id, volumeInfo } = bookFromApi.data;
       const { title, description, authors, categories } = volumeInfo;
       const createdBook = { title, id, description, authors, categories };
-      bookToAdd = await Book.create(createdBook);
+
+      // Agregar el libro a la base de datos y a la lista
+      const bookToAdd = await Book.create(createdBook);
+      await bookToAdd.addBookList(existingList);
+      return res.status(200).json(`Book '${bookToAdd.dataValues.title}' added to list '${existingList.dataValues.name}' API`)
     }
-    if(!bookToAdd) throw new Error("Book not found");
 
-    await bookToAdd.addBookList(existingList);
-
-    return bookToAdd;
   } catch (error) {
-    throw new Error("Failed to add book to list");
+    return res.status(400).json({ error: error.message });
   }
 };
 

@@ -5,7 +5,7 @@ const getBookByTitleHandler = async (req, res) => {
 
   try {
     const books = await getBookByTitle(title);
-    res.status(200).json(books);
+    res.status(200).json(books)
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
