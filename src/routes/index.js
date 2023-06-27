@@ -1,20 +1,19 @@
-const { Router } = require("express");
-const listRouter = require("./listRouter");
-const booksRouter = require("./booksRouter");
-const userRouter = require("./userRouter");
+const { Router } = require('express');
+const listRouter = require('./listRouter');
+const booksRouter = require('./booksRouter');
+const userRouter = require('./userRouter');
 
 const router = Router();
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRET_KEY;
-
 
 //Authorization: Bearer <token>
 const verifyToken = (req, res, next) => {
   try {
-    const bearerHeader = req.headers["authorization"];
-    if (!bearerHeader) throw new Error("Forbidden: Missing Token");
+    const bearerHeader = req.headers['authorization'];
+    if (!bearerHeader) throw new Error('Forbidden: Missing Token');
 
-    const bearerToken = bearerHeader.split(" ")[1];
+    const bearerToken = bearerHeader.split(' ')[1];
     req.token = bearerToken;
     next();
   } catch (error) {
@@ -26,7 +25,7 @@ const verifyTokenAuth = (req, res, next) => {
   try {
     jwt.verify(req.token, secretKey, (error, authData) => {
       if (error) {
-        throw new Error("Forbidden: Wrong token, you cannot access");
+        throw new Error('Forbidden: Wrong token, you cannot access');
       }
       next();
     });
@@ -35,8 +34,8 @@ const verifyTokenAuth = (req, res, next) => {
   }
 };
 
-router.use("/user", userRouter);
-router.use("/booklists", verifyToken, verifyTokenAuth, listRouter);
-router.use("/books", verifyToken, verifyTokenAuth, booksRouter);
+router.use('/user', userRouter);
+router.use('/booklists', verifyToken, verifyTokenAuth, listRouter);
+router.use('/books', verifyToken, verifyTokenAuth, booksRouter);
 
 module.exports = router;

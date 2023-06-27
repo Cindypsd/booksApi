@@ -1,8 +1,8 @@
-const { Sequelize } = require("sequelize");
-const BookListModel = require("./models/BookList");
-const BooksModel = require("./models/Book");
-const UserModel = require("./models/User");
-require("dotenv").config();
+const { Sequelize } = require('sequelize');
+const BookListModel = require('./models/BookList');
+const BooksModel = require('./models/Book');
+const UserModel = require('./models/User');
+require('dotenv').config();
 
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 const sequelize = new Sequelize(
@@ -17,10 +17,10 @@ UserModel(sequelize);
 const { BookList, Book, User } = sequelize.models;
 
 BookList.belongsToMany(Book, {
-  through: "BookListBooks",
+  through: 'BookListBooks',
   timestamps: false,
-  as: "books",
+  as: 'books',
 });
-Book.belongsToMany(BookList, { through: "BookListBooks", timestamps: false });
+Book.belongsToMany(BookList, { through: 'BookListBooks', timestamps: false });
 
 module.exports = { sequelize, ...sequelize.models };

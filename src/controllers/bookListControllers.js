@@ -1,11 +1,11 @@
-const axios = require("axios");
-const { BookList, Book } = require("../db");
-const { Op } = require("sequelize");
-const { validateBookTitle } = require("../utils/validations");
+const axios = require('axios');
+const { BookList, Book } = require('../db');
+const { Op } = require('sequelize');
+const { validateBookTitle } = require('../utils/validations');
 
 const createBookList = async (name) => {
   const existingList = await BookList.findOne({ where: { name } });
-  if (existingList) throw new Error("List name is already registered");
+  if (existingList) throw new Error('List name is already registered');
   return await BookList.create({ name });
 };
 
@@ -15,7 +15,7 @@ const getBookListByName = async (name) => {
     include: [
       {
         model: Book,
-        as: "books",
+        as: 'books',
       },
     ],
   });
@@ -26,8 +26,8 @@ const getAllBookLists = async () => {
   const allLists = await BookList.findAll({
     include: {
       model: Book,
-      as: "books",
-    }
+      as: 'books',
+    },
   });
   return allLists;
 };
@@ -35,7 +35,7 @@ const getAllBookLists = async () => {
 const deletedListByID = async (id) => {
   const existingList = await BookList.findByPk(id);
 
-  if (!existingList) throw new Error("List not found");
+  if (!existingList) throw new Error('List not found');
 
   await BookList.destroy({
     where: {
@@ -50,17 +50,22 @@ const AddBookToList = async (bookId, listId, res) => {
   try {
     // Primero verificar que exista la lista
     const existingList = await BookList.findByPk(listId);
-    if (!existingList) throw new Error("List not found");
+    if (!existingList) throw new Error('List not found');
 
     // Verificar si el libro ya está en la lista
     const isBookInList = await existingList.hasBook(bookId);
-    if (isBookInList) throw new Error(`Book with ID: ${bookId} is already in the list`);
+    if (isBookInList)
+      throw new Error(`Book with ID: ${bookId} is already in the list`);
 
     /// Verificar si el libro existe en la base de datos
     const bookInDB = await Book.findByPk(bookId);
     if (bookInDB) {
       await bookInDB.addBookList(existingList);
-      return res.status(200).json(`Book '${bookInDB.dataValues.title}' to list '${existingList.dataValues.name}' DB`)
+      return res
+        .status(200)
+        .json(
+          `Book '${bookInDB.dataValues.title}' to list '${existingList.dataValues.name}' DB`
+        );
     } else {
       // Si no está en la base de datos, buscar en la API
       console.log('-> Buscando en la API ...');
@@ -79,9 +84,12 @@ const AddBookToList = async (bookId, listId, res) => {
       // Agregar el libro a la base de datos y a la lista
       const bookToAdd = await Book.create(createdBook);
       await bookToAdd.addBookList(existingList);
-      return res.status(200).json(`Book '${bookToAdd.dataValues.title}' added to list '${existingList.dataValues.name}' API`)
+      return res
+        .status(200)
+        .json(
+          `Book '${bookToAdd.dataValues.title}' added to list '${existingList.dataValues.name}' API`
+        );
     }
-
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -89,10 +97,10 @@ const AddBookToList = async (bookId, listId, res) => {
 
 const removeBookFromList = async (bookId, listId) => {
   const bookList = await BookList.findByPk(listId);
-  if (!bookList) throw new Error("Book list not found");
+  if (!bookList) throw new Error('Book list not found');
 
   const book = await Book.findByPk(bookId);
-  if (!book) throw new Error("Book not found");
+  if (!book) throw new Error('Book not found');
 
   await bookList.removeBook(book);
 

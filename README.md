@@ -40,19 +40,22 @@ Make sure you have a PostgreSQL database set up. Update the database configurati
 
 ## **USAGE**
 
-####  User Registration
+#### User Registration
 
 - Endpoint: `/user/sign-up`
 - Method: `POST`
 - Description: Creates a new user account.
 - Request body:
+
 ```bash
     {
         "email" : "test@prueba.com",
 	      "password" : "1235545672"
     }
 ```
+
 - Response:
+
 ```bash
     {
         "id": 12,
@@ -61,19 +64,22 @@ Make sure you have a PostgreSQL database set up. Update the database configurati
     }
 ```
 
-####  Change Password
+#### Change Password
 
 - Endpoint: `/user/change-password`
 - Method: `PATCH`
 - Description: Change password.
 - Request body:
+
 ```bash
     {
       "email" : "test@prueba.com",
 	    "password" : "1235545672"
     }
 ```
+
 - Response:
+
 ```bash
     {
 	    "message": "Password changed successfully"
@@ -86,25 +92,25 @@ Make sure you have a PostgreSQL database set up. Update the database configurati
 - Method: `POST`
 - Description: Authenticates a user and generates an access token.
 - Request body:
+
 ```bash
     {
         "email" : "test@prueba.com",
 	      "password" : "1235545672"
     }
 ```
-- Response: Returns an access token.
 
+- Response: Returns an access token.
 
 **Note**: The access token should be included in the header of subsequent requests as follows:
 
 ```bash
     Authorization: Bearer <token>
 ```
+
 Where <token> is the access token generated during the login process.
 
-
 ## **BookList API**
-
 
 #### Create a new book list
 
@@ -148,7 +154,7 @@ Where <token> is the access token generated during the login process.
 - Endpoint: `/booklists?name=name`
 - Method: `GET`
 - Description: Retrieve a book lists.
-- Request example:  `/booklists?name=favo`
+- Request example: `/booklists?name=favo`
 - Response exmple:
 
 ```bash
@@ -243,11 +249,13 @@ Where <token> is the access token generated during the login process.
 	    },
     ]
 ```
+
 - Response:
+
 ```bash
 
       'Book < book title > added to list < list name >'
-  
+
 ```
 
 #### Remove book from List
@@ -256,6 +264,7 @@ Where <token> is the access token generated during the login process.
 - Method: `DELETE`
 - Description: Remove a book from a list specified by the list ID.
 - Response:
+
 ```bash
    'Book < book title > removed from the list'
 ```

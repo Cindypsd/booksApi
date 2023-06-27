@@ -5,7 +5,7 @@ const {
   deletedListByID,
   AddBookToList,
   removeBookFromList,
-} = require("../controllers/bookListControllers");
+} = require('../controllers/bookListControllers');
 
 const getAllBookListHandler = async (req, res) => {
   const { name } = req.query;
@@ -34,7 +34,7 @@ const deleteABookListHandler = async (req, res) => {
 
   try {
     await deletedListByID(id);
-    res.status(200).json({ message: "Book list deleted successfully" });
+    res.status(200).json({ message: 'Book list deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
