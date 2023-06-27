@@ -2,6 +2,8 @@ const axios = require('axios');
 const { BookList, Book } = require('../db');
 const { Op } = require('sequelize');
 const { validateBookTitle } = require('../utils/validations');
+require('dotenv').config();
+const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
 
 const createBookList = async (name) => {
   const existingList = await BookList.findOne({ where: { name } });
@@ -70,7 +72,7 @@ const AddBookToList = async (bookId, listId, res) => {
       // Si no está en la base de datos, buscar en la API
       console.log('-> Buscando en la API ...');
       const bookFromApi = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes/${bookId}?key=AIzaSyCQXKm94XO4hU-gK5b4kXtAxPUHPlQrYds`
+        `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${apiKey}`
       );
 
       if (!bookFromApi.data || !bookFromApi.data.volumeInfo) {

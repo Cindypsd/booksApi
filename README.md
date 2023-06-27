@@ -40,7 +40,25 @@ This command will generate a random secret key and automatically add it to the .
 
 Make sure you have a PostgreSQL database set up. Update the database configuration in the db.js file with your database credentials.
 
-5. Start the server:
+5. Setting up Google Books API Key
+
+To use the Google Books API, you need to generate an API key and add it to the `.env` file in the project root directory. Follow the steps below to generate your API key:
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Create a new project or select an existing project.
+3. Enable the Google Books API for your project.
+4. In the left sidebar, click on "APIs & Services" and then select "Credentials".
+5. Click on "Create Credentials" and choose "API key" from the dropdown menu.
+6. Copy the generated API key.
+
+Once you have the API key, add it to the `.env` file as follows:
+
+1. In the project root directory, create a new file called `.env` if it doesn't already exist.
+2. Open the `.env` file in a text editor.
+3. Add the following line to the file:
+
+
+6. Start the server:
 
 ```bash
   npm start
