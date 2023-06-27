@@ -28,6 +28,14 @@ To run the Book List API locally, follow these steps:
   DB_HOST=<database_host>
 ```
 
+Additionally, generate and add the secret key to the .env file by running the following command in the terminal:
+
+```bash
+  node secretKeyGenerator.js
+```
+
+This command will generate a random secret key and automatically add it to the .env file. Make sure to include the generated secret key in your application's configuration for authentication and security purposes.
+
 4. Set up the database:
 
 Make sure you have a PostgreSQL database set up. Update the database configuration in the db.js file with your database credentials.
