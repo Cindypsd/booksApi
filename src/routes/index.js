@@ -5,6 +5,8 @@ const userRouter = require("./userRouter");
 
 const router = Router();
 const jwt = require("jsonwebtoken");
+const secretKey = process.env.SECRET_KEY;
+
 
 //Authorization: Bearer <token>
 const verifyToken = (req, res, next) => {
@@ -22,7 +24,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyTokenAuth = (req, res, next) => {
   try {
-    jwt.verify(req.token, "secretkey", (error, authData) => {
+    jwt.verify(req.token, secretKey, (error, authData) => {
       if (error) {
         throw new Error("Forbidden: Wrong token, you cannot access");
       }

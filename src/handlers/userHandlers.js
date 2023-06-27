@@ -1,6 +1,7 @@
 const { registerUser , changePassword} = require("../controllers/userControllers");
 const { User } = require("../db");
 const jwt = require("jsonwebtoken");
+const secretKey = process.env.SECRET_KEY;
 
 const signupHandler = async (req, res) => {
   const { email, password } = req.body;
@@ -21,7 +22,7 @@ const loginHandler = async (req, res) => {
     if (!user) throw new Error("Email is not registered");
     if (user.password !== password) throw new Error("Wrong password");
 
-    jwt.sign({ user }, "secretkey", (err, token) => {
+    jwt.sign({ user }, secretKey, (err, token) => {
       res.json({
         token,
       });
